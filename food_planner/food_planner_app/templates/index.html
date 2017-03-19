@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Planificateur de repas</title>
+<style>
+h1, h4 {
+    text-align: center;
+} 
+
+html, body {
+    width: 1000px;
+} 
+
+#body {
+    width: 1000px;
+	//border: 1px solid black
+} 
+
+#test {
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.day {
+	width: 300px;
+	margin-left: auto;
+	margin-right: auto;
+	border: 1px solid black;
+}
+
+#groceries_list {
+    float: right;
+	border: 1px solid black;
+	height: 1400px;
+	width: 450px;
+	overflow : hidden;
+	position: relative;
+    left: 80px;
+}
+
+#daily_meals {
+	float:left;
+	border: 1px solid black;
+	height: 1400px;
+	width: 450px;
+	margin: 0 auto;
+	position: relative;
+    left: 0px;
+	
+}
+</style>
+</head>
+<body>
+
+<h1>Semaine du 20 au 26 mars</h1>
+
+<div id="body">
+
+<div id="daily_meals">
+{% for day in daily_meals %}
+<div id="{{ day }}_meals" class="day">
+<h4>{{ day.0 }}</h4>
+<div class="breakfast">
+<p>Déjeuner : {{ day.1.0 }}</p>
+</div>
+<div class="lunch">
+<p>Diner : {{ day.1.1 }}</p>
+</div>
+<div class="dinner">
+<p>Souper : {{ day.1.2 }}</p>
+</div>
+</div>
+
+{% endfor %}
+</div>
+
+<div id="groceries_list">
+<ul>
+{% for ingredient in ingredient_list %}
+<li>{{ ingredient.name }} [{{ ingredient.quantity }}x]</li>
+{% endfor %}
+</ul>
+<p>Notes<br>------------------------------</p>
+</div>
+
+</div>
+</body>
+</html>
