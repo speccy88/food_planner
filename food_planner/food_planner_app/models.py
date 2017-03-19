@@ -19,7 +19,17 @@ class Recipe(models.Model):
 	breakfast = models.BooleanField(default=False)
 	lunch = models.BooleanField(default=True)
 	dinner = models.BooleanField(default=True)
+	sunday = models.BooleanField(default=True)
+	monday = models.BooleanField(default=True)
+	tuesday = models.BooleanField(default=True)
+	wednesday = models.BooleanField(default=True)
+	thursday = models.BooleanField(default=True)
+	friday = models.BooleanField(default=True)
+	generate_lunch = models.BooleanField(default=True)
+	quick_preparation = models.BooleanField(default=False)
+	long_preparation = models.BooleanField(default=False)
 	ingredients = models.ManyToManyField(Ingredient, through=RecipeIngredient)
+	
 	
 	def __str__(self):
 		return self.recipe_name
