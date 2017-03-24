@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿{% load app_filters %}
+
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -6,7 +8,12 @@
 <style>
 h1 {
     text-align: center;
-} 
+}
+
+#notes h1 {
+    font-size: 140%;
+}
+
 
 html, body {
     width: 1000px;
@@ -14,14 +21,7 @@ html, body {
 
 #body {
     width: 1000px;
-	//border: 1px solid black
 } 
-
-#test {
-	width: 90%;
-	margin-left: auto;
-	margin-right: auto;
-}
 
 .day {
 	width: 300px;
@@ -33,20 +33,27 @@ html, body {
 }
 
 .day_header {
-	margin-left: auto;
-	margin-right: auto;
 	border: 1px solid black;
 	background-color: LightGray;
-	vertical-align: middle;
+	//vertical-align: middle;
 	text-align: center;
 	font-weight: bold;
 	font-size: 110%;
+    padding: 0;
 }
 
 #groceries_list {
     float: right;
 	border: 1px solid black;
-	height: 1400px;
+	width: 450px;
+	overflow : hidden;
+	position: relative;
+    left: 80px;
+}
+
+#notes {
+    float: right;
+	bottom-border: 1px solid black;
 	width: 450px;
 	overflow : hidden;
 	position: relative;
@@ -56,22 +63,42 @@ html, body {
 #daily_meals {
 	float:left;
 	border: 1px solid black;
-	height: 1400px;
+	height: 1200px;
 	width: 450px;
 	margin: 0 auto;
 	position: relative;
-    left: 0px;
-	
+    left: 0px;	
 }
 
 .padded {
 	padding-left: 10px;
 }
 </style>
+
+<script>
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("source_text", ev.target.innerHTML);
+    ev.dataTransfer.setData("source_id", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var source_text = ev.dataTransfer.getData("source_text");
+    var source_id = ev.dataTransfer.getData("source_id");
+    var target_text = ev.target.innerHTML;
+    document.getElementById(source_id).innerHTML = target_text;
+    ev.target.innerHTML = source_text;
+}
+</script>
+
 </head>
 <body>
 
-<h1>Semaine du 20 au 26 mars</h1>
+<h1>Repas pour la semaine du dimanche le {{ start_end_days.0 }} au vendredi le {{ start_end_days.1 }}</h1>
 
 <div id="body">
 
@@ -80,24 +107,24 @@ html, body {
 <div id="{{ day }}_meals" class="day">
 
 <div class="day_header">
-<p>{{ day.day }}</p>
+<p>{{ day.day|translate }}</p>
 </div>
 
 {% if day.breakfast %}
 <div class="breakfast">
-<p class="padded">Déjeuner : {{ day.breakfast }}</p>
+<p id="breakfast{{ forloop.counter }}" ondrop="drop(event)" ondragover="allowDrop(event)" class="padded">Déjeuner : {{ day.breakfast }}</p>
 </div>
 {% endif %}
 
 {% if day.lunch %}
-<div class="lunch">
-<p class="padded">Diner : {{ day.lunch }}</p>
+<div ondrop="drop(event)" ondragover="allowDrop(event)" class="lunch">
+<p id="lunch{{ forloop.counter }}" draggable="true" ondragstart="drag(event)" class="padded">Dîner : {{ day.lunch }}</p>
 </div>
 {% endif %}
 
 {% if day.dinner %}
-<div class="dinner">
-<p class="padded">Souper : {{ day.dinner }}</p>
+<div ondrop="drop(event)" ondragover="allowDrop(event)" class="dinner">
+<p id="dinner{{ forloop.counter }}" draggable="true" ondragstart="drag(event)" class="padded">Souper : {{ day.dinner }}</p>
 </div>
 {% endif %}
 
@@ -111,7 +138,10 @@ html, body {
 <li>{{ ingredient.0 }} [{{ ingredient.1 }}x]</li>
 {% endfor %}
 </ul>
-<p>Notes<br>------------------------------</p>
+</div>
+
+<div id="notes">
+<h1>Notes</h1>
 </div>
 
 </div>
